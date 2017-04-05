@@ -1,0 +1,33 @@
+
+
+
+create procedure WinningBidding.BridgeTokens_SP (
+	OUT returnId INT
+	,IN argAttuid VARCHAR(10)
+	,IN argAction VARCHAR(2)
+	,IN argId INT
+	,IN argTokenName VARCHAR(45)
+	,IN argTokenChar VARCHAR(5)
+	,IN argTokenValue VARCHAR(45))
+BEGIN
+	DECLARE	attuid varchar(10);
+	DECLARE action varchar(2);
+	DECLARE tokenName varchar(45);
+	DECLARE tokenChar varchar(5);
+	DECLARE tokenValue varchar(45);
+	set attuid=LTRIM(RTRIM(argAttuid));
+	set action=LTRIM(RTRIM(argAction));
+	set tokenName=LTRIM(RTRIM(argTokenName));
+	set tokenChar=LTRIM(RTRIM(argTokenChar));
+	set tokenValue=LTRIM(RTRIM(argTokenValue));
+	set returnId=argId;
+	case action
+		when 'I' then
+				begin
+					insert into WinningBidding.bridgeTokens (tokenName,tokenChar,tokenValue,addedBy,addedDate)
+					Values(tokenName,tokenChar,tokenValue,attuid,CURRENT_TIMESTAMP);
+					set returnId=last_insert_id();
+				end;
+	end case;
+	
+END
